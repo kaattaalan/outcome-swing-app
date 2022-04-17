@@ -80,8 +80,10 @@ public class OutComeWorker extends SwingWorker<Map<String,String>,Progress> {
                     }
                 }
             }
+            //listened to by @WorkerListener
+            setProgress((++iter * 100) / gameMap.size());
             urlMap.put(entry.getKey(),urlFound);
-            publish(new Progress(entry.getKey(),urlFound,++iter));
+            publish(new Progress(entry.getKey(),urlFound));
         }
         return urlMap;
     }

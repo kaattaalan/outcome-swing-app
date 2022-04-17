@@ -1,4 +1,5 @@
 import Util.Progress;
+import Util.WorkerListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -146,14 +147,14 @@ class OutcomeFrame
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == sub) {
             tout.setText("");
+            //Sends func.interfaces to perform while progress and done
             worker = new OutComeWorker(artUrl.getText(), uname.getText(), password.getText(), gameMap, c -> {
                 tout.append(String.format("%s - %s\n", c.getKey(), c.getValue() == null ? "Not Found" : "Found"));
-                int perComplete = (c.getProgress() * 100) / gameMap.size();
-                progress.setValue(perComplete);
             }, c -> {
                 progress.setValue(100);
                 urlMap = c;
             });
+            worker.addPropertyChangeListener(new WorkerListener(progress));
             worker.execute();
         } else if (e.getSource() == fbutton) {
             fileChooser.showOpenDialog(c);
