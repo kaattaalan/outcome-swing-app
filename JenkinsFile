@@ -1,0 +1,42 @@
+@Library('virgo-games@feature/docker-pipeline') _
+import com.ingg.Game
+
+properties([
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+])
+
+def games = []
+games << new Game('big-bonus','1.5.0-1.2.0-1')
+games << new Game('bigfishingfortune','1.4.0-1.1.0')
+games << new Game('book-of-the-irish','1.9.0-1.6.0')
+games << new Game('centurion-megaways','1.2.0-1.1.0')
+games << new Game('desperados-wild-bonus-buy','1.1.0-1.2.0')
+games << new Game('mighty-hot-wilds','1.1.0-1.2.0')
+games << new Game('rainbow-cash-pots','1.2.0-1.2.0')
+games << new Game('stacked-fire-7s','1.1.1-1.1.0')
+games << new Game('super-fire-7s','1.11.0-1.7.0')
+games << new Game('20c-shot','1.1.0-1.1.0')
+games << new Game('anubis-wild','1.2.0-1.2.0')
+games << new Game('big-500-slot','1.5.1-1.4.0')
+games << new Game('gold-cash','1.9.0-1.6.0')
+games << new Game('bear-money','1.8.1-1.4.0-2')
+games << new Game('big-piggy-bonus','1.0.0-1.0.0-2')
+games << new Game('big-spin-bonus','1.1.0-1.1.0-2')
+games << new Game('bonus-fruits','1.2.0-1.1.0-2')
+games << new Game('bonus-island-bonus-buy','1.1.0-1.0.0-2')
+games << new Game('bullion-bars-grab-the-gold','1.0.1-1.0.0-2')
+games << new Game('christmas-cash-pots','1.3.0-1.2.0-2')
+games << new Game('hot-bonus-joker','1.1.0-1.1.0-2')
+games << new Game('jungle-falls','1.0.0-1.0.0-2')
+games << new Game('scarab-gold','1.2.0-1.1.0-2')
+games << new Game('super-fruits-wild','1.13.0-1.9.0-2')
+games << new Game('super-hot-fruits-megaways','1.0.0-1.0.0-2')
+games << new Game('temple-of-light','1.0.1-1.0.0-2')
+games << new Game('vegas-cashspins','1.6.0-1.2.0-2')
+games << new Game('gold-cash-freespins','1.4.0-1.1.0-1')
+games << new Game('reel-king-megaways','1.6.0-1.3.0-1')
+games << new Game('something-fruity','1.0.2-1.0.0-1')
+games << new Game('fishing-cash-pots','1.2.0-1.1.0')
+
+
+gamePublishPipeline games: games
