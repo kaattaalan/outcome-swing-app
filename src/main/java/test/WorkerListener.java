@@ -1,4 +1,4 @@
-package Util;
+package test;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;

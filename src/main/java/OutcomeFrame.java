@@ -1,5 +1,6 @@
 import Util.Progress;
-import Util.WorkerListener;
+import Util.Props;
+import test.WorkerListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,7 +77,7 @@ class OutcomeFrame
         urlTitle.setLocation(100, 150);
         c.add(urlTitle);
 
-        artUrl = new JTextField(OutComeUtil.ART_URL);
+        artUrl = new JTextField(Props.artifactory_url);
         artUrl.setFont(new Font("Arial", Font.PLAIN, 12));
         artUrl.setSize(300, 20);
         artUrl.setLocation(180, 150);
@@ -138,6 +139,11 @@ class OutcomeFrame
         tout.setAutoscrolls(true);
         c.add(tout);
 
+        if(Props.credsExists()) {
+            uname.setText(Props.artifactory_username);
+            password.setText(Props.artifactory_password);
+        }
+
         setVisible(true);
     }
 
@@ -164,16 +170,13 @@ class OutcomeFrame
                 fclabel.setText(fileChooser.getSelectedFile().getAbsolutePath());
                 tout.setText(String.format("Found %d games \n %s", gameMap.size(), gameMap));
                 sub.setVisible(true);
-                //
-                uname.setText("appu.sbabu");
-                password.setText("!nspired2020");
             }
         } else if (e.getSource() == reset) {
             tout.setText("");
             password.setText("");
             uname.setText("");
             fclabel.setText("Choose JenkinsFile");
-            artUrl.setText(OutComeUtil.ART_URL);
+            artUrl.setText(Props.artifactory_url);
             sub.setVisible(false);
         }
 

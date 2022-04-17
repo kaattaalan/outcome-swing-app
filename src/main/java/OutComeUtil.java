@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 
 public class OutComeUtil {
 
-    public static final String ART_URL = "https://artifactory.ingg.com/artifactory/game-releases-local/mobile/virgo/";
     public static final String GAMEREGEX = "\\('([^']*)','([^']*)'\\)";
 
     public static Map<String, String> getGameMap(String filePath) {
