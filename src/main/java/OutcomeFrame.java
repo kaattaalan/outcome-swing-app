@@ -1,6 +1,6 @@
+import Util.OutComeUtil;
 import Util.Progress;
 import Util.Props;
-import test.WorkerListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +32,7 @@ class OutcomeFrame
     private JLabel passLabel;
     private JButton reset;
     private JProgressBar progress;
+    private JFileChooser saveFC;
 
 
     // constructor, to initialize the components
@@ -139,6 +140,11 @@ class OutcomeFrame
         tout.setAutoscrolls(true);
         c.add(tout);
 
+        saveFC = new JFileChooser("./");
+        saveFC.setDialogTitle("Save File..");
+        saveFC.setFont(new Font("Arial", Font.PLAIN, 15));
+        saveFC.addActionListener(this);
+
         if(Props.credsExists()) {
             uname.setText(Props.artifactory_username);
             password.setText(Props.artifactory_password);
@@ -159,6 +165,7 @@ class OutcomeFrame
             }, c -> {
                 progress.setValue(100);
                 urlMap = c;
+                setSave();
             });
             worker.addPropertyChangeListener(new WorkerListener(progress));
             worker.execute();
@@ -178,7 +185,16 @@ class OutcomeFrame
             fclabel.setText("Choose JenkinsFile");
             artUrl.setText(Props.artifactory_url);
             sub.setVisible(false);
+        }else if (e.getSource() == saveFC) {
+            if (saveFC.getSelectedFile() != null) {
+                OutComeUtil.writeToFile(urlMap,saveFC.getSelectedFile());
+            }
         }
+
+    }
+
+    public void setSave(){
+        saveFC.showSaveDialog(c);
 
     }
 

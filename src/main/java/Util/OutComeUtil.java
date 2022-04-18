@@ -1,18 +1,12 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.network.Network;
-import org.openqa.selenium.devtools.network.model.Headers;
+package Util;
 
-import java.io.BufferedReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +34,27 @@ public class OutComeUtil {
             e.printStackTrace();
         }
         return gameMap;
+    }
+
+    public static void writeToFile(Map<String, String> urlMap, File saveTo) {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(saveTo))) {
+            for (Map.Entry<String, String> entry :
+                    urlMap.entrySet()) {
+
+                // put key and value separated by a colon
+                bufferedWriter.write(entry.getKey() + ":"
+                        + entry.getValue());
+
+                // new line
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            System.out.println(String.format("writing %d to %s", urlMap.size(), saveTo.getAbsolutePath()));
+        }
     }
 
 
