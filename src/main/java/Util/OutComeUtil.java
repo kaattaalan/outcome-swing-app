@@ -1,5 +1,7 @@
 package Util;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -36,13 +38,16 @@ public class OutComeUtil {
         return gameMap;
     }
 
-    public static void writeToFile(Map<String, String> urlMap, File saveTo) {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(saveTo))) {
+    public static void writeToFile(Map<String, String> urlMap, File file) {
+        if (! FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("csv")) {
+            file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".csv"); // ALTERNATIVELY: remove the extension (if any) and replace it with ".xml"
+        }
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             for (Map.Entry<String, String> entry :
                     urlMap.entrySet()) {
 
                 // put key and value separated by a colon
-                bufferedWriter.write(entry.getKey() + ":"
+                bufferedWriter.write(entry.getKey() + ","
                         + entry.getValue());
 
                 // new line
@@ -52,8 +57,7 @@ public class OutComeUtil {
 
         } catch (IOException e) {
             e.printStackTrace();
-
-            System.out.println(String.format("writing %d to %s", urlMap.size(), saveTo.getAbsolutePath()));
+            System.out.println(String.format("writing %d to %s", urlMap.size(), file.getAbsolutePath()));
         }
     }
 

@@ -3,6 +3,7 @@ import Util.Progress;
 import Util.Props;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,6 +34,7 @@ class OutcomeFrame
     private JButton reset;
     private JProgressBar progress;
     private JFileChooser saveFC;
+    private JButton saveButton;
 
 
     // constructor, to initialize the components
@@ -109,6 +111,20 @@ class OutcomeFrame
         password.setLocation(200, 250);
         c.add(password);
 
+        saveButton = new JButton("Save Results");
+        saveButton.setFont(new Font("Arial", Font.PLAIN, 15));
+        saveButton.setSize(150, 20);
+        saveButton.setLocation(200, 300);
+        saveButton.setVisible(false);
+        saveButton.addActionListener(this);
+        c.add(saveButton);
+
+
+        saveFC = new JFileChooser("./");
+        saveFC.setDialogTitle("Save File..");
+        saveFC.addActionListener(this);
+        saveFC.setFileFilter(new FileNameExtensionFilter("CSV file","csv"));
+
         progress = new JProgressBar();
         progress.setFont(new Font("Arial", Font.PLAIN, 12));
         progress.setStringPainted(true);
@@ -140,10 +156,6 @@ class OutcomeFrame
         tout.setAutoscrolls(true);
         c.add(tout);
 
-        saveFC = new JFileChooser("./");
-        saveFC.setDialogTitle("Save File..");
-        saveFC.setFont(new Font("Arial", Font.PLAIN, 15));
-        saveFC.addActionListener(this);
 
         if(Props.credsExists()) {
             uname.setText(Props.artifactory_username);
@@ -185,17 +197,19 @@ class OutcomeFrame
             fclabel.setText("Choose JenkinsFile");
             artUrl.setText(Props.artifactory_url);
             sub.setVisible(false);
+            saveButton.setVisible(false);
         }else if (e.getSource() == saveFC) {
             if (saveFC.getSelectedFile() != null) {
                 OutComeUtil.writeToFile(urlMap,saveFC.getSelectedFile());
             }
+        }else if(e.getSource() == saveButton){
+            saveFC.showSaveDialog(c);
         }
 
     }
 
     public void setSave(){
-        saveFC.showSaveDialog(c);
-
+        saveButton.setVisible(true);
     }
 
     public interface UIUpdate {
