@@ -202,7 +202,7 @@ public class OutcomeFrame
         } else if (e.getSource() == fbutton) {
             fileChooser.showOpenDialog(c);
         } else if (e.getSource() == fileChooser) {
-            if (fileChooser.getApproveButtonMnemonic() == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
+            if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION) && fileChooser.getSelectedFile() != null) {
                 gameMap = OutComeUtil.getGameMap(fileChooser.getSelectedFile().getAbsolutePath());
                 fclabel.setText(fileChooser.getSelectedFile().getAbsolutePath());
                 tout.setText(String.format("Found %d games \n %s", gameMap.size(), gameMap));
@@ -228,7 +228,7 @@ public class OutcomeFrame
             progress.setValue(0);
             downFC.showOpenDialog(c);
         } else if (e.getSource() == downFC) {
-            if (downFC.getApproveButtonMnemonic() == JFileChooser.APPROVE_OPTION && downFC.getSelectedFile() != null) {
+            if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION) && downFC.getSelectedFile() != null) {
                 DownloadWorker worker = new DownloadWorker(urlMap, downFC.getSelectedFile(), uname.getText(), password.getText(),progress,tout);
                 worker.addPropertyChangeListener(new WorkerListener(progress));
                 worker.execute();

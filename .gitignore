@@ -1,3 +1,4 @@
 /.idea
 /target
 /JenkinsFile
+/dependency-reduced-pom.xml

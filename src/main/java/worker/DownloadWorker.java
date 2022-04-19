@@ -45,6 +45,7 @@ public class DownloadWorker extends SwingWorker<String, Integer> {
                 HttpURLConnection urlConnection = (HttpURLConnection) fetchUrl.openConnection();
                 urlConnection.setRequestProperty("Authorization", "Basic " + base64login);
                 urlConnection.connect();
+                //TODO: check if file already exists
                 if (HttpURLConnection.HTTP_OK == urlConnection.getResponseCode()) {
                     File outFile = new File(file,FilenameUtils.getName(fetchUrl.getPath()));
                     FileOutputStream outputStream = new FileOutputStream(outFile);

@@ -38,10 +38,10 @@ public class OutComeUtil {
         return gameMap;
     }
 
-    //TODO: check whether file is open
+    //TODO: check whether file is open/exists
     public static void writeToFile(Map<String, String> urlMap, File file) {
         if (! FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("csv")) {
-            file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".csv"); // ALTERNATIVELY: remove the extension (if any) and replace it with ".xml"
+            file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".csv");
         }
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             for (Map.Entry<String, String> entry :
