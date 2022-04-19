@@ -1,4 +1,4 @@
-package Util;
+package util;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -38,6 +38,7 @@ public class OutComeUtil {
         return gameMap;
     }
 
+    //TODO: check whether file is open
     public static void writeToFile(Map<String, String> urlMap, File file) {
         if (! FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("csv")) {
             file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".csv"); // ALTERNATIVELY: remove the extension (if any) and replace it with ".xml"

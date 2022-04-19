@@ -1,6 +1,11 @@
-import Util.OutComeUtil;
-import Util.Progress;
-import Util.Props;
+package ui;
+
+import util.OutComeUtil;
+import util.Progress;
+import util.Props;
+import worker.DownloadWorker;
+import worker.OutComeWorker;
+import worker.WorkerListener;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -10,13 +15,12 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-class OutcomeFrame
+public class OutcomeFrame
         extends JFrame
         implements ActionListener {
 
     Map<String, String> urlMap;
     private Map<String, String> gameMap = new HashMap<>();
-    private OutComeWorker worker;
     // Components of the Form
     private Container c;
     private JLabel title;
@@ -35,6 +39,8 @@ class OutcomeFrame
     private JProgressBar progress;
     private JFileChooser saveFC;
     private JButton saveButton;
+    private JButton downloadButton;
+    private JFileChooser downFC;
 
 
     // constructor, to initialize the components
@@ -111,19 +117,33 @@ class OutcomeFrame
         password.setLocation(200, 250);
         c.add(password);
 
-        saveButton = new JButton("Save Results");
+        saveButton = new JButton("Save Results to file");
         saveButton.setFont(new Font("Arial", Font.PLAIN, 15));
         saveButton.setSize(150, 20);
-        saveButton.setLocation(200, 300);
+        saveButton.setLocation(100, 300);
+        saveButton.setToolTipText("Save Results to a CSV file.");
         saveButton.setVisible(false);
         saveButton.addActionListener(this);
         c.add(saveButton);
 
+        downloadButton = new JButton("Download files");
+        downloadButton.setFont(new Font("Arial", Font.PLAIN, 15));
+        downloadButton.setToolTipText("Download files to the selected folder.");
+        downloadButton.setSize(150, 20);
+        downloadButton.setLocation(300, 300);
+        downloadButton.setVisible(false);
+        downloadButton.addActionListener(this);
+        c.add(downloadButton);
 
         saveFC = new JFileChooser("./");
         saveFC.setDialogTitle("Save File..");
         saveFC.addActionListener(this);
-        saveFC.setFileFilter(new FileNameExtensionFilter("CSV file","csv"));
+        saveFC.setFileFilter(new FileNameExtensionFilter("CSV file", "csv"));
+
+        downFC = new JFileChooser("./");
+        downFC.setDialogTitle("Download files to..");
+        downFC.addActionListener(this);
+        downFC.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         progress = new JProgressBar();
         progress.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -156,11 +176,7 @@ class OutcomeFrame
         tout.setAutoscrolls(true);
         c.add(tout);
 
-
-        if(Props.credsExists()) {
-            uname.setText(Props.artifactory_username);
-            password.setText(Props.artifactory_password);
-        }
+        populateCreds();
 
         setVisible(true);
     }
@@ -172,8 +188,10 @@ class OutcomeFrame
         if (e.getSource() == sub) {
             tout.setText("");
             //Sends func.interfaces to perform while progress and done
-            worker = new OutComeWorker(artUrl.getText(), uname.getText(), password.getText(), gameMap, c -> {
-                tout.append(String.format("%s - %s\n", c.getKey(), c.getValue() == null ? "Not Found" : "Found"));
+            OutComeWorker worker = new OutComeWorker(artUrl.getText(), uname.getText(), password.getText(), gameMap, c -> {
+                if (c.getValue() == null) {
+                    tout.append(String.format("%s - %s\n", c.getKey(), "Not Found"));
+                }
             }, c -> {
                 progress.setValue(100);
                 urlMap = c;
@@ -184,7 +202,7 @@ class OutcomeFrame
         } else if (e.getSource() == fbutton) {
             fileChooser.showOpenDialog(c);
         } else if (e.getSource() == fileChooser) {
-            if (fileChooser.getSelectedFile() != null) {
+            if (fileChooser.getApproveButtonMnemonic() == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
                 gameMap = OutComeUtil.getGameMap(fileChooser.getSelectedFile().getAbsolutePath());
                 fclabel.setText(fileChooser.getSelectedFile().getAbsolutePath());
                 tout.setText(String.format("Found %d games \n %s", gameMap.size(), gameMap));
@@ -196,20 +214,39 @@ class OutcomeFrame
             uname.setText("");
             fclabel.setText("Choose JenkinsFile");
             artUrl.setText(Props.artifactory_url);
+            populateCreds();
             sub.setVisible(false);
             saveButton.setVisible(false);
-        }else if (e.getSource() == saveFC) {
+            downloadButton.setVisible(false);
+        } else if (e.getSource() == saveFC) {
             if (saveFC.getSelectedFile() != null) {
-                OutComeUtil.writeToFile(urlMap,saveFC.getSelectedFile());
+                OutComeUtil.writeToFile(urlMap, saveFC.getSelectedFile());
             }
-        }else if(e.getSource() == saveButton){
+        } else if (e.getSource() == saveButton) {
             saveFC.showSaveDialog(c);
+        } else if (e.getSource() == downloadButton) {
+            progress.setValue(0);
+            downFC.showOpenDialog(c);
+        } else if (e.getSource() == downFC) {
+            if (downFC.getApproveButtonMnemonic() == JFileChooser.APPROVE_OPTION && downFC.getSelectedFile() != null) {
+                DownloadWorker worker = new DownloadWorker(urlMap, downFC.getSelectedFile(), uname.getText(), password.getText(),progress,tout);
+                worker.addPropertyChangeListener(new WorkerListener(progress));
+                worker.execute();
+            }
         }
 
     }
 
-    public void setSave(){
+    public void setSave() {
         saveButton.setVisible(true);
+        downloadButton.setVisible(true);
+    }
+
+    public void populateCreds() {
+        if (Props.credsExists()) {
+            uname.setText(Props.artifactory_username);
+            password.setText(Props.artifactory_password);
+        }
     }
 
     public interface UIUpdate {

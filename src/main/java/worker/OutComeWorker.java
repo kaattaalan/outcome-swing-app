@@ -1,4 +1,7 @@
-import Util.Progress;
+package worker;
+
+import ui.OutcomeFrame;
+import util.Progress;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -80,7 +83,7 @@ public class OutComeWorker extends SwingWorker<Map<String,String>,Progress> {
                     }
                 }
             }
-            //listened to by @WorkerListener
+            //listened to by @worker.WorkerListener
             setProgress((++iter * 100) / gameMap.size());
             urlMap.put(entry.getKey(),urlFound);
             publish(new Progress(entry.getKey(),urlFound));

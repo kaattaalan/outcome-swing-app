@@ -1,4 +1,5 @@
-import Util.Props;
+import ui.OutcomeFrame;
+import util.Props;
 
 public class OutComeFinder {
 
