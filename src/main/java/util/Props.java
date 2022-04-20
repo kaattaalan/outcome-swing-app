@@ -7,6 +7,7 @@ public class Props {
     public static String artifactory_url;
     public static String artifactory_username;
     public static String artifactory_password;
+    public static String APP_TITLE = "Get Games OutCome";
 
     public static void loadProperties(String[] args){
         ResourceBundle rb = ResourceBundle.getBundle("config");

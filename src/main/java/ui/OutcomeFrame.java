@@ -15,6 +15,8 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import static util.Props.APP_TITLE;
+
 public class OutcomeFrame
         extends JFrame
         implements ActionListener {
@@ -47,7 +49,7 @@ public class OutcomeFrame
     // with default values.
     public OutcomeFrame() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        setTitle("Outcome finder");
+        setTitle(APP_TITLE);
         setBounds(300, 90, 900, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
@@ -55,7 +57,7 @@ public class OutcomeFrame
         c = getContentPane();
         c.setLayout(null);
 
-        title = new JLabel("Outcome finder");
+        title = new JLabel(APP_TITLE);
         title.setFont(new Font("Arial", Font.PLAIN, 30));
         title.setSize(300, 30);
         title.setLocation(300, 30);
