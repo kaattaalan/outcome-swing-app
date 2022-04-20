@@ -46,8 +46,7 @@ public class OutComeUtil {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) {
             for (Map.Entry<String, String> entry :
                     urlMap.entrySet()) {
-
-                // put key and value separated by a colon
+                //Writes as comma seperated values
                 bufferedWriter.write(entry.getKey() + ","
                         + entry.getValue());
 

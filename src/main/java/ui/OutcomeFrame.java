@@ -144,6 +144,8 @@ public class OutcomeFrame
         downFC.setDialogTitle("Download files to..");
         downFC.addActionListener(this);
         downFC.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        downFC.setDialogType(JFileChooser.SAVE_DIALOG);
+        downFC.setApproveButtonText("Select");
 
         progress = new JProgressBar();
         progress.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -226,7 +228,7 @@ public class OutcomeFrame
             saveFC.showSaveDialog(c);
         } else if (e.getSource() == downloadButton) {
             progress.setValue(0);
-            downFC.showOpenDialog(c);
+            downFC.showSaveDialog(c);
         } else if (e.getSource() == downFC) {
             if (e.getActionCommand().equals(JFileChooser.APPROVE_SELECTION) && downFC.getSelectedFile() != null) {
                 DownloadWorker worker = new DownloadWorker(urlMap, downFC.getSelectedFile(), uname.getText(), password.getText(),progress,tout);
